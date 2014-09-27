@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.2.xsd
+http://www.springframework.org/schema/jdbc 
+http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="packagesToScan" value="org.shigglewitz.chess.entity" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="generateDdl" value="true" />
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<value>
+				hibernate.connection.release_mode=auto
+				hibernate.connection.autocommit=true
+				hibernate.hbm2ddl.auto=${HIBERNATE_HMB2DDL}
+				hibernate.default_schema=${DATABASE_SCHEMA}
+			</value>
+		</property>
+	</bean>
+
+	<jdbc:initialize-database data-source="dataSource" enabled="false">
+		<jdbc:script execution="INIT" location="classpath:chessSetup.sql"
+			encoding="UTF-8" />
+		<jdbc:script execution="DESTROY" location="classpath:chessTeardown.sql"
+			encoding="UTF-8" />
+	</jdbc:initialize-database>
+
+	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
+		id="transactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
+
+	<bean class="java.net.URI" id="dbUrl">
+		<constructor-arg value="${DATABASE_URL}" />
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close" p:maxPoolSize="25"
+		p:maxIdleTimeExcessConnections="2" p:minPoolSize="5"
+		p:autoCommitOnClose="true" p:acquireIncrement="2" p:maxIdleTime="1800"
+		p:driverClass="org.postgresql.Driver"
+		p:jdbcUrl="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?' + @dbUrl.getQuery() }"
+		p:user="#{@dbUrl.getUserInfo().split(':')[0]}" p:password="#{ @dbUrl.getUserInfo().split(':')[1] }" />
+</beans>
