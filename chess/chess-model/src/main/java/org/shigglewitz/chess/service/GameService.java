@@ -1,6 +1,5 @@
 package org.shigglewitz.chess.service;
 
-import org.shigglewitz.chess.controller.exception.BadRequestException;
 import org.shigglewitz.chess.entity.Board;
 import org.shigglewitz.chess.entity.Game;
 import org.shigglewitz.chess.entity.Game.Color;
@@ -45,12 +44,12 @@ public class GameService {
 
     @Transactional
     public void movePiece(Game game, String startSquareDescr,
-            String destSquareDescr) throws BadRequestException {
+            String destSquareDescr) throws IllegalArgumentException {
         Board board = game.getBoard();
         Square startSquare = board.getSquare(startSquareDescr);
 
         if (startSquare.getPiece() == null) {
-            throw new BadRequestException("No piece at square "
+            throw new IllegalArgumentException("No piece at square "
                     + startSquareDescr);
         }
 
