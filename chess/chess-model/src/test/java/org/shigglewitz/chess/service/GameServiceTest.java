@@ -13,31 +13,31 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration({ "classpath:applicationContext-hibernate.xml",
-	"classpath:applicationContext-daoBeans.xml",
-	"classpath:applicationContext-serviceBeans.xml" })
+		"classpath:applicationContext-daoBeans.xml",
+		"classpath:applicationContext-serviceBeans.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class GameServiceTest {
-    @Autowired
-    private GameService gameService;
+	@Autowired
+	private GameService gameService;
 
-    @Ignore
-    @Test
-    public void testMovePiece() {
-        Game game = Game.createDefaultGame();
-        Player player = new Player();
-    }
+	@Ignore
+	@Test
+	public void testMovePiece() {
+		Game game = Game.createDefaultGame();
+		Player player = new Player();
+	}
 
-    @Test
-    public void testDefaultGameCreation() {
-        Game game = this.gameService.createGame();
+	@Test
+	public void testDefaultGameCreation() {
+		Game game = this.gameService.createGame(null, null);
 
-        assertNotNull(game.getId());
-        assertNotNull(game.getBoard().getId());
+		assertNotNull(game.getId());
+		assertNotNull(game.getBoard().getId());
 
-        for (Piece p : game.getBoard().getPieces()) {
-            assertNotNull(
-                    p.getName() + " at square " + p.getFile() + ","
-                            + p.getRank() + " has no id", p.getId());
-        }
-    }
+		for (Piece p : game.getBoard().getPieces()) {
+			assertNotNull(
+					p.getName() + " at square " + p.getFile() + ","
+							+ p.getRank() + " has no id", p.getId());
+		}
+	}
 }

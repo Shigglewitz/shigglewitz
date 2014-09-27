@@ -7,4 +7,5 @@
   </parent>
   <groupId>org.shigglewitz.chess</groupId>
   <artifactId>chess-model</artifactId>
+  <name>Chess Model</name>
 </project>
