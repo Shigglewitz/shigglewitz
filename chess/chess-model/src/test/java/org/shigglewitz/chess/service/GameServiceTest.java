@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@ContextConfiguration({ "classpath:applicationContext-Chess.xml" })
+@ContextConfiguration({ "classpath:applicationContext-hibernate.xml",
+	"classpath:applicationContext-daoBeans.xml",
+	"classpath:applicationContext-serviceBeans.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class GameServiceTest {
     @Autowired
