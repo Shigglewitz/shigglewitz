@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = Properties.GAME_REST_CONTROLLER_PATH)
+@RequestMapping(value = Properties.GAME_REST_CONTROLLER_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class GameRestController {
 	@Autowired
 	private GameService gameService;
 
-	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody GameRepresentation createGame(
 			@RequestParam("lightPlayer") UUID lightPlayerId,
 			@RequestParam("darkPlayer") UUID darkPlayerId) {
@@ -35,7 +35,7 @@ public class GameRestController {
 		return new GameRepresentation(game);
 	}
 
-	@RequestMapping(value = "/{game_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{game_id}", method = RequestMethod.GET)
 	public @ResponseBody GameRepresentation viewGame(
 			@PathVariable("game_id") UUID gameId) {
 		Game game = this.gameService.getGame(gameId);
