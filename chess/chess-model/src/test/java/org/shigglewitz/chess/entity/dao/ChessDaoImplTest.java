@@ -77,7 +77,7 @@ public class ChessDaoImplTest {
 
 	@Test
 	public void testGetGame() {
-		Game game = this.gameService.createGame();
+		Game game = this.gameService.createGame(null, null);
 		UUID id = game.getId();
 		assertNotNull(id);
 		game = null;
@@ -126,7 +126,7 @@ public class ChessDaoImplTest {
 	@Test
 	@Transactional
 	public void testUpdateGame() {
-		Game game = this.gameService.createGame();
+		Game game = this.gameService.createGame(null, null);
 		UUID id = game.getId();
 		assertEquals(Color.LIGHT, game.getColorToMove());
 		assertEquals(0, game.viewMoves().size());

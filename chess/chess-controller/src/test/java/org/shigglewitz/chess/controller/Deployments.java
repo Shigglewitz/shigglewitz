@@ -6,6 +6,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.shigglewitz.chess.controller.mvc.GameMvcController;
 import org.shigglewitz.chess.maven.Properties;
 
 public class Deployments {
@@ -21,7 +22,7 @@ public class Deployments {
 
         controllerWar = ShrinkWrap.create(WebArchive.class, "Chess.war");
         controllerWar.setWebXML(new File(WEBAPP_SRC, "WEB-INF/web.xml"));
-        controllerWar.addPackage(GameController.class.getPackage());
+        controllerWar.addPackage(GameMvcController.class.getPackage());
         String[] jsps = getJsps(new String[] { "viewChess" });
 
         for (String jsp : jsps) {
